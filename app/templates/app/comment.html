@@ -1,0 +1,45 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block content %}
+<!-- comments.html -->
+<section id="comments-page">
+  <div class="container">
+    <header class="page-header">
+      <h2>Comments</h2>
+      <a href="{% url 'home' %}" class="back-btn">← Back</a>
+    </header>
+
+    <!-- Post header -->
+    <article class="post-preview">
+      <img src="{{ post.image.url }}" alt="Post image" class="post-image">
+      <p class="caption">{{ post.caption }}</p>
+    </article>
+
+    <div class="comments-list">
+      <!-- Loop through each comment -->
+      {% for comment in commented_users %}
+        <div class="comment-item">
+          <img src="{{ comment.viewer.avatar.url }}" alt="{{ comment.viewer.username }}" class="avatar">
+          <div class="comment-body">
+            <div class="comment-header">
+              <a href="{% url 'profile' comment.viewer.id %}" class="username">{{ comment.viewer.username }}</a>
+              <span class="timestamp">{{ comment.timestamp|timesince }} ago</span>
+            </div>
+            <p class="comment-text">{{ comment.comment_text }}</p>
+          </div>
+        </div>
+      {% empty %}
+        <p class="no-comments">No comments yet. Be the first to comment!</p>
+      {% endfor %}
+    </div>
+
+    <!-- Add new comment form -->
+    <form method="POST" class="comment-form">
+      {% csrf_token %}
+      <textarea name="text" placeholder="Write your comment..." required></textarea>
+      <button type="submit">Post</button>
+    </form>
+  </div>
+</section>
+
+{% endblock %}

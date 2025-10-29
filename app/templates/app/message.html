@@ -1,0 +1,29 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block content %}
+<section id="messages-page">
+  <div class="messages-container">
+    <header class="messages-header">
+      <h2>Messages</h2>
+      <input type="text" id="search-user" placeholder="Search chats..." />
+    </header>
+
+    <div class="chat-list">
+      <!-- Example User Chat Item -->
+      <!-- In Django, this would be a for loop -->
+       {% for user in user_chat %}
+        <div class="chat-item">
+                <img src="{{user.avatar.url}}" alt="User" class="chat-avatar">
+                <div class="chat-details">
+                <a href="{% url 'chat' user.id %}"><h4 class="chat-username">{{user.username}}</h4></a>
+                <p class="last-message">You: Hey, what’s up?</p>
+                </div>
+                <span class="message-time">2h ago</span>
+                
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

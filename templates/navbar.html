@@ -1,0 +1,21 @@
+<nav class="navbar">
+    <a href="{% url 'home' %}" class="logo">SocialMedia</a>
+    <form action="{% url 'search_user' %}" method="get" class="search-bar">
+        <input type="text" name="q" placeholder="Search users..." required>
+        <button type="submit">🔍</button>
+    </form>
+    <ul class="nav-links">
+        {% if request.user.is_authenticated %}
+        <li><a href="{% url 'home' %}">Home</a></li>
+        <li><a href="{% url 'message' %}">Messages</a></li>
+        <li><a href="{% url 'profile' request.user.id %}">Profile</a></li>
+        <li><a href="{% url 'logout' %}">Logout</a></li>
+        {% else %}
+        <li><a href="{% url 'home' %}">Home</a></li>
+        <li><a href="{% url 'login' %}">Messages</a></li>
+        <li><a href="{% url 'login' %}">Profile</a></li>
+        <li><a href="{% url 'login' %}">Login</a></li>
+        <li><a href="{% url 'register' %}">Register</a></li>
+        {% endif %}
+    </ul>
+</nav>

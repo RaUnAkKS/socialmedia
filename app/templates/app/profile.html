@@ -1,0 +1,76 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block title %}{{ request.user.username }} • Profile{% endblock %}
+
+{% block content %}
+<section class="profile-page">
+
+  <!-- Profile Header -->
+  <div class="profile-header">
+    <div class="profile-avatar">
+      <img src="{{ owner.avatar.url }}" alt="Profile Picture">
+    </div>
+    <div class="profile-info">
+      <div class="profile-top">
+        <h2 class="username">{{ owner.username }}</h2>
+        {% if request.user == owner %}
+        {% if request.user.is_authenticated %}
+        <a href="{% url 'update' %}" class="btn-edit">Edit Profile</a>
+        {% endif %}
+        {% endif %}
+        {% if request.user != owner %}
+        <form method="POST" action="{% url 'follow_unfollow' owner.id %}" class="follow-form">
+            {% csrf_token %}
+            <button type="submit" class="btn-follow">
+            {% if following_ornot is None %}
+                Follow
+            {% else %}
+                Unfollow
+            {% endif %}
+            </button>
+        </form>
+        <a href="{% url 'chat' owner.id %}" class="btn-message">Message</a>
+        {% endif %}
+</div>
+      </div>
+      <ul class="profile-stats">
+        <li><strong>{{posts.count}}</strong> posts</li>
+        <!-- Followers -->
+        <li>
+          <a href="{% url 'follow_user' owner.id %}?name=follower" class="clickable-stat">
+            <strong>{{ owner.following.count }}</strong> followers
+          </a>
+        </li>
+
+        <!-- Following -->
+        <li>
+          <a href="{% url 'follow_user' owner.id %}?name=following" class="clickable-stat">
+            <strong>{{ owner.follower.count }}</strong> following
+          </a>
+        </li>
+      </ul>
+      <p class="profile-bio">
+        {{ owner.bio|default:"No bio yet." }}
+      </p>
+      <p class="profile-location">
+        📍 {{ owner.location|default:"Unknown" }}
+      </p>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- Posts Grid -->
+  <div class="profile-posts">
+    {% for post in posts %}
+    <div class="post-item">
+      <img src="{{post.image.url}}" alt="Post">
+      {{post.caption}}
+      {{post.timestamp}}
+    </div>
+    {% endfor %}
+  </div>
+
+</section>
+{% endblock %}

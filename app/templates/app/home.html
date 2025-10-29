@@ -1,0 +1,102 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block title %}Home • SocialMedia{% endblock %}
+
+{% block content %}
+{% if request.user.is_authenticated %}
+<div class="upload-container">
+  <a href="{% url 'post' %}" class="btn-upload">+ Upload a Post</a>
+  <a href="{% url 'story_post' %}" class="btn-upload">+ Upload a Story</a>
+</div>
+<!-- STORIES SECTION -->
+<section id="stories">
+  <h2>Stories</h2>
+  <div class="story-list">
+    {% for story in all_story %}
+    <div class="story-item">
+      <!-- When clicked, it will go to the story view page -->
+      <a href="{% url 'story' story.id %}" class="story-link">
+        <img src="{{story.user.avatar.url}}" alt="{{story.user.username}}">
+      </a>
+      <span>{{story.user.username}}</span>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+
+<!-- FEED SECTION -->
+<section id="feed">
+  <div class="feed-container">
+    <!-- Post 1 -->
+    {% for post in posts %}
+      <article class="post">
+        <header class="post-header">
+          <img src="{{post.user.avatar.url}}" alt="profile">
+          <div>
+            <a href="{% url 'profile' post.user.id %}"><h3>{{post.user.username}}</h3></a>
+            <p class="timestamp">{{post.timestamp|timesince}}</p>
+          </div>
+        </header>
+        <img src="{{post.image.url}}" alt="Post Image" class="post-image">
+        <div class="post-body">
+          <form method="POST" action="{% url 'engagement' post.id %}" class="actions">
+            {% csrf_token %}
+            {% if post.id in liked_post_ids %}
+            <button type="submit" name="like" value="like">❤️</button>
+            {% else %}
+            <button type="submit" name="like" value="like">🤍</button>
+            {% endif %}
+            <button type="submit" name="comment" value="like">💬</button>
+          </form>
+          <p>{{post.caption}}</p>
+          <p><a href="{% url 'like_detail' post.id %}">{{post.like.count}} Likes</a> | <a href="{% url 'engagement' post.id %}">{{post.comment.count}} Comments</a></p>
+          <!-- <p>{{post.caption}}</p> -->
+        </div>
+      </article>
+    {% endfor %}
+  </div>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <!-- <div class="suggestions card">
+      <h2>Suggestions for You</h2>
+      <div class="suggestion">
+        <div class="user-info">
+          <img src="{{request.user.avatar.url}}" alt="">
+          <p>alex99</p>
+        </div>
+        <button>Follow</button>
+      </div>
+      <div class="suggestion">
+        <div class="user-info">
+          <img src="{{request.user.avatar.url}}" alt="">
+          <p>mike_w</p>
+        </div>
+        <button>Follow</button>
+      </div>
+    </div> -->
+
+    <div class="messages card">
+      <h2>Messages</h2>
+      {% for user in user_chat %}
+        <div class="message">
+          <img src="{{user.avatar.url}}" alt="">
+          <div>
+            <a href="{% url 'chat' user.id %}"><p class="name">{{user.username}}</p></a>
+            <p class="text">Hey, what’s up?</p>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </aside>
+</section>
+{% endif %}
+
+<!-- FOOTER -->
+<footer id="footer">
+  <p>© 2025 SocialMedia — Built with ❤️ by Raunak</p>
+</footer>
+
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block content %}
+<section id="followers-page">
+  <div class="followers-container">
+    <h2 class="followers-heading">
+      {{name}}
+    </h2>
+
+    <!-- Followers List -->
+    <div class="followers-list">
+      {% for user in follows %}
+      <div class="follower-card">
+        <div class="follower-info">
+          <img src="{{ user.avatar.url }}" alt="User avatar" class="follower-avatar" />
+          <div class="follower-details">
+            <h4 class="username">{{ user.username }}</h4>
+            {% if user.bio %}
+            <p class="bio">{{ user.bio|truncatewords:8 }}</p>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="follower-action">
+          {% if user != request.user %}
+          <a href="{% url 'profile' user.id %}" class="view-btn">View</a>
+          {% endif %}
+        </div>
+      </div>
+      {% empty %}
+      <p class="no-followers">No users found.</p>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

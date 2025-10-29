@@ -1,0 +1,25 @@
+<!-- likes.html -->
+{% extends 'main.html' %}
+{% load static %}
+{% block content %}
+<section id="likes-page">
+  <div class="container">
+    <header class="page-header">
+      <h2>Likes</h2>
+      <a href="{% url 'home' %}" class="back-btn">← Back</a>
+    </header>
+
+    <!-- Loop through all users who liked this post -->
+    {% for user in liked_users %}
+      <div class="user-card">
+        <img src="{{ user.viewer.avatar.url }}" alt="{{ user.viewer.username }}'s avatar" class="avatar">
+        <div class="user-info">
+          <a href="{% url 'profile' user.viewer.id %}" class="username">{{ user.viewer.username }}</a>
+        </div>
+      </div>
+    {% empty %}
+      <p class="no-likes">No one has liked this post yet.</p>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

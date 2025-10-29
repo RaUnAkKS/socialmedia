@@ -1,0 +1,60 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block content %}
+
+<section id="chat-page">
+  <div class="chat-container">
+
+    <!-- Chat Header -->
+    <header class="chat-header">
+      <a href="{% url 'message' %}" class="back-btn">←</a>
+      <div class="chat-user">
+        <img src="{{other_person.avatar.url}}" alt="User avatar" class="avatar">
+        <div>
+          <h3 class="username">{{other_person.username}}</h3>
+          <span class="status-text online">Online</span>
+        </div>
+      </div>
+      <button class="more-options">⋮</button>
+    </header>
+
+    <!-- Chat Body -->
+    <div class="chat-body" id="chatBody">
+      <!-- Example messages -->
+        {% for msg in all_conversation %}
+            {% if msg.user1.username != request.user.username %}
+                <div class="message incoming">
+                    <img src="{{msg.user1.avatar.url}}" alt="User avatar" class="msg-avatar">
+                    <div class="bubble">
+                    <p>{{msg.text}}</p>
+                    <span class="time">{{msg.created|timesince}}</span>
+                    </div>
+                </div>
+            {% else %}
+                <div class="message outgoing">
+                    <div class="bubble">
+                    <p>{{msg.text}}</p>
+                    <span class="time">{{msg.created|timesince}}</span>
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+
+    <!-- Chat Input -->
+    <form class="chat-input" method="POST">
+      {% csrf_token %}
+      <input type="text" name="message" placeholder="Type a message..." required />
+      <button type="submit">➤</button>
+    </form>
+
+  </div>
+</section>
+
+<script>
+  // Auto-scroll to the latest message
+  const chatBody = document.getElementById('chatBody');
+  chatBody.scrollTop = chatBody.scrollHeight;
+</script>
+
+{% endblock %}

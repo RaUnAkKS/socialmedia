@@ -1,0 +1,33 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block content %}
+
+<section id="search-results">
+  <div class="results-container">
+
+    <h2 class="results-title">Search Results</h2>
+
+    <!-- Simulated user list -->
+    {% for user in all_user %}
+        {% if user.id != request.user.id %}
+            <div class="user-card">
+            <img src="{{user.avatar.url}}" alt="User avatar" class="user-avatar">
+            <div class="user-info">
+                <h3>{{user.username}}</h3>
+                {% if user.bio %}
+                <p>{{user.bio}}</p>
+                {% endif %}
+            </div>
+            <div class="user-actions">
+                <a href="{% url 'profile' user.id %}" class="btn-view">View Profile</a>
+                <a href="{% url 'chat' user.id %}" class="btn-message">Message</a>
+            </div>
+            </div>
+        {% endif %}
+    {% empty %}
+            <h3>No Result Found</h3>
+    {% endfor %}
+  </div>
+</section>
+
+{% endblock %}

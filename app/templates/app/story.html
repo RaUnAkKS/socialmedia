@@ -1,0 +1,34 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block content %}
+<section id="story-view">
+  <div class="story-container">
+    
+    <!-- Header with progress bar -->
+    <header class="story-header">
+      <div class="progress-bar">
+        <div class="progress"></div>
+      </div>
+      <div class="story-user">
+        <img src="{{post.user.avatar.url}}" alt="User" class="avatar">
+        <h3>@{{post.user.username}}</h3>
+      </div>
+      <button class="close-btn" onclick="window.history.back()">×</button>
+    </header>
+
+    <!-- Main story content -->
+    <div class="story-content">
+      <img src="{{post.image.url}}" alt="Story Image" class="story-image">
+    </div>
+
+    <!-- Footer with reply option -->
+    <footer class="story-footer">
+      <input type="text" placeholder="Send message..." class="reply-input">
+      <button class="send-btn">Send</button>
+    </footer>
+  </div>
+</section>
+
+<script src="{% static 'js/story_view.js' %}"></script>
+{% endblock %}
